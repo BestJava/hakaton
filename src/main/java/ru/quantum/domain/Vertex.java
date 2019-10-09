@@ -1,3 +1,4 @@
+package ru.quantum.domain;
 import java.util.List;
 
 public class Vertex {

@@ -1,12 +1,14 @@
-public class inkassator {
+package ru.quantum.domain;
+
+public class Inkassator {
     private int mashineCount;
     Graph graph;
 
-    public inkassator() {
+    public Inkassator() {
         graph = new Graph();
     }
 
-    void init(int mashineCount, int pointCount, String jsonMap ) {
+    void init(int mashineCount, int pointCount, String jsonMap) {
         this.mashineCount = mashineCount;
         graph.parseJSON(jsonMap);
     }
