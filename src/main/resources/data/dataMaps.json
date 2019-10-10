@@ -1,0 +1,94 @@
+[
+  {
+    "name": "Point1",
+    "time": 50,
+    "summa": 1000000,
+    "target": false,
+    "edge": [
+      {
+        "Point2": 100
+      },
+      {
+        "Point3": 200
+      }
+    ]
+  },
+  {
+    "name": "Point2",
+    "time": 50,
+    "summa": 1000000,
+    "target": false,
+    "edge": [
+      {
+        "Point4": 100
+      },
+      {
+        "Point7": 200
+      }
+    ]
+  },
+  {
+    "name": "Point3",
+    "time": 50,
+    "summa": 1000000,
+    "target": true,
+    "edge": [
+      {
+        "Point1": 100
+      }
+    ]
+  },
+  {
+    "name": "Point4",
+    "time": 50,
+    "summa": 1000000,
+    "target": false,
+    "edge": [
+      {
+        "Point2": 100
+      },
+      {
+        "Point5": 100
+      }
+    ]
+  },
+  {
+    "name": "Point5",
+    "time": 50,
+    "summa": 1000000,
+    "target": true,
+    "edge": [
+      {
+        "Point6": 100
+      },
+      {
+        "Point7": 100
+      }
+    ]
+  },
+  {
+    "name": "Point6",
+    "time": 50,
+    "summa": 1000000,
+    "target": false,
+    "edge": [
+      {
+        "Point2": 100
+      }
+    ]
+  },
+  {
+    "name": "Point7",
+    "time": 50,
+    "summa": 1000000,
+    "target": false,
+    "edge": [
+      {
+        "Point2": 100
+      },
+      {
+        "Point5": 100
+      }
+    ]
+  }
+]

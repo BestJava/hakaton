@@ -1,23 +1,31 @@
 package ru.quantum.domain;
 
 public class Inkassator {
-    private int mashineCount;
-    Graph graph;
+    private int autoCashCount;
+    private Graph graph;
 
     public Inkassator() {
         graph = new Graph();
     }
 
-    void init(int mashineCount, int pointCount, String jsonMap) {
-        this.mashineCount = mashineCount;
+    public void init(int mashineCount, int pointCount, String jsonMap) {
+        this.autoCashCount = mashineCount;
         graph.parseJSON(jsonMap);
     }
 
-    Mashine getMashine(int mashineNum) {
+    public Mashine getMashine(int mashineNum) {
         return null;
     }
 
     void getNextPoint(int mashineNum) {
         Mashine mashine = getMashine(mashineNum);
+    }
+
+    public int getAutoCashCount() {
+        return autoCashCount;
+    }
+
+    public Graph getGraph() {
+        return graph;
     }
 }
