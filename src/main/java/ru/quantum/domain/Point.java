@@ -1,20 +1,25 @@
 package ru.quantum.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
 public class Point {
     private String name;
-    private boolean target; // true если точка сбора
-    private int summa; // сумма денег в точке
-    private int time; // время сбора/выгрузки денег
+    private boolean target;
+    private BigDecimal sumPoint;
+    private int timePoint;
+    private int status;
+    private BigDecimal weight;
+    private List<Map<String, Integer>> edge;
     private List<Vertex> partInTree;
-    private List<Map<String, Integer>> edge; // пути(ребра) до других точек
-    private int status; // статус, чтобы отметить если машина уже выехала в точку, чтобы не отпралять туда же вторую
 
     public Point() {
     }
 
+    /**
+     * @return Наименование точки
+     */
     public String getName() {
         return name;
     }
@@ -23,6 +28,9 @@ public class Point {
         this.name = name;
     }
 
+    /**
+     * @return Является ли точкой сбора
+     */
     public boolean isTarget() {
         return target;
     }
@@ -31,30 +39,31 @@ public class Point {
         this.target = target;
     }
 
-    public int getSumma() {
-        return summa;
+    /**
+     * @return сумма денег в точке
+     */
+    public BigDecimal getSumPoint() {
+        return sumPoint;
     }
 
-    public void setSumma(int summa) {
-        this.summa = summa;
+    public void setSumPoint(BigDecimal sumPoint) {
+        this.sumPoint = sumPoint;
     }
 
-    public int getTime() {
-        return time;
+    /**
+     * @return время сбора/выгрузки денег
+     */
+    public int getTimePoint() {
+        return timePoint;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void setTimePoint(int timePoint) {
+        this.timePoint = timePoint;
     }
 
-    public List<Vertex> getPartInTree() {
-        return partInTree;
-    }
-
-    public void setPartInTree(List<Vertex> partInTree) {
-        this.partInTree = partInTree;
-    }
-
+    /**
+     * @return пути(ребра) до смежных точек
+     */
     public List<Map<String, Integer>> getEdge() {
         return edge;
     }
@@ -63,11 +72,41 @@ public class Point {
         this.edge = edge;
     }
 
+    /**
+     * <ul>
+     *     <li>0 - в данную точку машина не выезжала</li>
+     *     <li>1 - в данную точку уже выехала машина</li>
+     * </ul>
+     *
+     * @return Текущий статус точки
+     */
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    /**
+     * @return текущий вес точки (сумма/время загрузки)
+     */
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    /**
+     * посчитаем вес точки
+     */
+    public void calcWeightPoint() {
+        this.weight = (this.timePoint <= 0) ? this.sumPoint : this.sumPoint.divide(BigDecimal.valueOf(this.timePoint), 2, BigDecimal.ROUND_UP);
+    }
+
+    public List<Vertex> getPartInTree() {
+        return partInTree;
+    }
+
+    public void setPartInTree(List<Vertex> partInTree) {
+        this.partInTree = partInTree;
     }
 }

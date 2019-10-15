@@ -13,7 +13,7 @@ public class Main {
         File file = new File(Main.class.getResource(FILE_PATH).getFile());
         String dataMaps = new String(Files.readAllBytes(file.toPath()));
         Inkassator app = new Inkassator();
-        app.init(5, 500, dataMaps);
+        app.init(5, dataMaps);
         System.out.println("Graph points = " + app.getGraph().getPoints().size());
     }
 }

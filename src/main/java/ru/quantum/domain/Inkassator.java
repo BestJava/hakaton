@@ -1,5 +1,7 @@
 package ru.quantum.domain;
 
+import ru.quantum.builder.GraphBuilder;
+
 public class Inkassator {
     private int autoCashCount;
     private Graph graph;
@@ -8,9 +10,10 @@ public class Inkassator {
         graph = new Graph();
     }
 
-    public void init(int mashineCount, int pointCount, String jsonMap) {
+    public void init(int mashineCount, String jsonMap) {
         this.autoCashCount = mashineCount;
-        graph.parseJSON(jsonMap);
+        GraphBuilder builderGraph = new GraphBuilder(jsonMap);
+        this.graph = builderGraph.build();
     }
 
     public Mashine getMashine(int mashineNum) {
