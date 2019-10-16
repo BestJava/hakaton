@@ -14,7 +14,8 @@ public class Point {
     private List<Map<String, Integer>> edge;
     private List<Vertex> partInTree;
 
-    public Point() {
+    public Point(String name) {
+        this.name = name;
     }
 
     /**

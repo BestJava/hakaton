@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class Graph {
     private List<Point> points = new ArrayList<>();
+    private Edge[][] edges;
     Vertex root;
     List<Branch> branches;
 
@@ -19,6 +20,21 @@ public class Graph {
     }
 
     public void setPoints(List<Point> points) {
-        this.points = points;
+        if (this.points.isEmpty()) {
+            this.points = points;
+        } else {
+            this.points.addAll(points);
+        }
+    }
+
+    /**
+     * @return ребра графа
+     */
+    public Edge[][] getEdges() {
+        return edges;
+    }
+
+    public void setEdges(Edge[][] edges) {
+        this.edges = edges;
     }
 }

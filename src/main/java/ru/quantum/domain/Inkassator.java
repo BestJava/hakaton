@@ -12,8 +12,7 @@ public class Inkassator {
 
     public void init(int mashineCount, String jsonMap) {
         this.autoCashCount = mashineCount;
-        GraphBuilder builderGraph = new GraphBuilder(jsonMap);
-        this.graph = builderGraph.build();
+        this.graph = new GraphBuilder(jsonMap).build();
     }
 
     public Mashine getMashine(int mashineNum) {
