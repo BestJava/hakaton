@@ -14,6 +14,6 @@ public class Main {
         String dataMaps = new String(Files.readAllBytes(file.toPath()));
         Inkassator app = new Inkassator();
         app.init(5, dataMaps);
-        System.out.println("Graph points = " + app.getGraph().getPoints().size());
+        System.out.println(app.getGraph().toString());
     }
 }
