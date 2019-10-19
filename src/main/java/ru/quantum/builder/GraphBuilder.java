@@ -1,6 +1,6 @@
 package ru.quantum.builder;
 
-import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import ru.quantum.domain.Edge;
 import ru.quantum.domain.Graph;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Класс для создания и наполнение класса-графа
+ * Класс для создания и наполнение класса-графа {@link Graph}
  */
 public class GraphBuilder {
     private String dataJson;
@@ -22,61 +22,70 @@ public class GraphBuilder {
     }
 
     /**
+     * Разбор входных данных формата JSON
+     *
+     * @param dataJson строка в формате JSON
+     * @return список вершин(точек)
+     */
+    public List<Point> parseOfPoints(String dataJson) {
+        // распарсим входные данные JSON
+        Type typeJson = TypeToken.getParameterized(List.class, Point.class).getType();
+        return new Gson().fromJson(this.dataJson, typeJson);
+    }
+
+    /**
      * Создание и наполнения данными графа
      *
      * @return граф
      */
     public Graph build() {
         Graph graph = new Graph();
-        // распарсим входные данные JSON
-        Type typeJson = TypeToken.getParameterized(List.class, Point.class).getType();
-        GsonBuilder gson = new GsonBuilder();
-        gson.registerTypeAdapter(typeJson, new PointDeserializer());
-        graph.setPoints(gson.create().fromJson(dataJson, typeJson));
-        initEdge(graph); // построим граф
+        graph.setPoints(parseOfPoints(this.dataJson));
+        initEdges(graph); // построим граф
         return graph;
     }
 
     /**
-     * Построим матрицу связанности вершин графа
+     * Наполним ребра и построим матрицу связанности вершин графа
      *
      * @param graph граф с вершинами
      */
-    private void initEdge(Graph graph) {
+    private void initEdges(Graph graph) {
         List<Point> points = graph.getPoints();
         if (!points.isEmpty()) {
+            graph.setEdgesMap(new Edge[points.size()][points.size()]);
             Point pointI, pointJ;
-            Map<String, Integer> mapI, mapJ;
-            int countPoint = points.size();
-            Edge[][] edges = new Edge[countPoint][countPoint];
-            for (int i = 0; i < countPoint; i++) {
+            Map<String, Integer> mapPaths;
+            int edgeCnt = 0;
+            for (int i = 0; i < graph.getEdgesMap().length; i++) {
                 pointI = points.get(i);
                 String eqNameI = pointI.getName();
-                for (int j = 0; j < countPoint; j++) {
+                for (int j = 0; j < graph.getEdgesMap()[i].length; j++) {
                     pointJ = points.get(j);
                     String eqNameJ = pointJ.getName();
-                    if (!eqNameJ.equals(eqNameI) && !pointJ.getEdge().isEmpty()) {
-                        mapJ = pointJ.getEdge().stream()
-                                .filter(it -> it.containsKey(eqNameI))
-                                .findFirst().orElse(null);
-                        if (Objects.nonNull(mapJ)) {
-                            edges[i][j] = new Edge(pointI, pointJ, Long.valueOf(mapJ.get(eqNameI)));
-                            continue;
-                        }
-                        mapI = pointI.getEdge().stream()
+                    if (Objects.nonNull(pointI.getPath())) {
+                        mapPaths = pointI.getPath().stream()
                                 .filter(it -> it.containsKey(eqNameJ))
                                 .findFirst().orElse(null);
-                        if (Objects.nonNull(mapI)) {
-                            edges[i][j] = new Edge(pointI, pointJ, Long.valueOf(mapI.get(eqNameJ)));
+                        if (Objects.nonNull(mapPaths)) {
+                            graph.getEdges().add(edgeCnt, new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameJ))));
+                            graph.getEdgesMap()[i][j] = graph.getEdges().get(edgeCnt);
+                            edgeCnt++;
                             continue;
                         }
-                        edges[i][j] = new Edge(0L);
-                    } else {
-                        edges[i][j] = new Edge(-0L);
+                    }
+                    if (Objects.nonNull(pointJ.getPath())) {
+                        mapPaths = pointJ.getPath().stream()
+                                .filter(it -> it.containsKey(eqNameI))
+                                .findFirst().orElse(null);
+                        if (Objects.nonNull(mapPaths)) {
+                            graph.getEdges().add(edgeCnt, new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameI))));
+                            graph.getEdgesMap()[i][j] = graph.getEdges().get(edgeCnt);
+                            edgeCnt++;
+                        }
                     }
                 }
             }
-            graph.setEdges(edges);
         }
     }
 }

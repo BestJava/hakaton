@@ -4,12 +4,15 @@
     "timePoint": 50,
     "sumPoint": 1000000,
     "target": false,
-    "edge": [
+    "path": [
       {
         "Point2": 100
       },
       {
         "Point3": 200
+      },
+      {
+        "Point1": 100
       }
     ]
   },
@@ -18,7 +21,7 @@
     "timePoint": 50,
     "sumPoint": 1000000,
     "target": false,
-    "edge": [
+    "path": [
       {
         "Point4": 100
       },
@@ -32,9 +35,12 @@
     "timePoint": 50,
     "sumPoint": 1000000,
     "target": true,
-    "edge": [
+    "path": [
       {
         "Point1": 100
+      },
+      {
+        "Point7": 100
       }
     ]
   },
@@ -43,7 +49,7 @@
     "timePoint": 50,
     "sumPoint": 1000000,
     "target": false,
-    "edge": [
+    "path": [
       {
         "Point2": 100
       },
@@ -57,7 +63,7 @@
     "timePoint": 50,
     "sumPoint": 1000000,
     "target": true,
-    "edge": [
+    "path": [
       {
         "Point6": 100
       },
@@ -71,7 +77,7 @@
     "timePoint": 50,
     "sumPoint": 1000000,
     "target": false,
-    "edge": [
+    "path": [
       {
         "Point2": 100
       }
@@ -82,9 +88,23 @@
     "timePoint": 50,
     "sumPoint": 1000000,
     "target": false,
-    "edge": [
+    "path": [
       {
         "Point2": 100
+      },
+      {
+        "Point5": 100
+      }
+    ]
+  },
+  {
+    "name": "Point8",
+    "timePoint": 500,
+    "sumPoint": 1000000000,
+    "target": true,
+    "path": [
+      {
+        "Point4": 100
       },
       {
         "Point5": 100

@@ -4,14 +4,17 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Класс описывающий вершины(точки) графа
+ */
 public class Point {
     private String name;
     private boolean target;
     private BigDecimal sumPoint;
-    private int timePoint;
+    private long timePoint;
     private int status;
     private BigDecimal weight;
-    private List<Map<String, Integer>> edge;
+    private List<Map<String, Integer>> path;
     private List<Vertex> partInTree;
 
     public Point(String name) {
@@ -54,23 +57,23 @@ public class Point {
     /**
      * @return время сбора/выгрузки денег
      */
-    public int getTimePoint() {
+    public long getTimePoint() {
         return timePoint;
     }
 
-    public void setTimePoint(int timePoint) {
+    public void setTimePoint(long timePoint) {
         this.timePoint = timePoint;
     }
 
     /**
-     * @return пути(ребра) до смежных точек
+     * @return пути(ребра) до других точек
      */
-    public List<Map<String, Integer>> getEdge() {
-        return edge;
+    public List<Map<String, Integer>> getPath() {
+        return path;
     }
 
-    public void setEdge(List<Map<String, Integer>> edge) {
-        this.edge = edge;
+    public void setPath(List<Map<String, Integer>> path) {
+        this.path = path;
     }
 
     /**

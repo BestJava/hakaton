@@ -1,21 +1,20 @@
 package ru.quantum.domain;
 
+import java.math.BigDecimal;
+
 /**
  * Класс описывающий ребра графа и вес
  */
 public class Edge {
     private Point pointX;
     private Point pointY;
-    private long weight;
+    private long timeEdge;
+    private BigDecimal weight;
 
-    public Edge(long weight) {
-        this.weight = weight;
-    }
-
-    public Edge(Point from, Point to, long weight) {
+    public Edge(Point from, Point to, long timeEdge) {
         this.pointX = from;
         this.pointY = to;
-        this.weight = Math.addExact(weight, pointY.getTimePoint());
+        this.weight = this.pointY.getSumPoint().divide(BigDecimal.valueOf(Math.addExact(timeEdge, pointY.getTimePoint())),2, BigDecimal.ROUND_UP);
     }
 
     /**
@@ -41,13 +40,24 @@ public class Edge {
     }
 
     /**
-     * @return вес ребра (время в пути)
+     * @return время в пути
      */
-    public long getWeight() {
+    public long getTimeEdge() {
+        return timeEdge;
+    }
+
+    public void setTimeEdge(long timeEdge) {
+        this.timeEdge = timeEdge;
+    }
+
+    /**
+     * @return вес ребра Формула: сумма на точке Y/(время в пути + разгрузки)
+     */
+    public BigDecimal getWeight() {
         return weight;
     }
 
-    public void setWeight(long weight) {
+    public void setWeight(BigDecimal weight) {
         this.weight = weight;
     }
 }
