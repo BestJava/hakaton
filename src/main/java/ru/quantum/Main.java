@@ -34,7 +34,7 @@ public class Main {
             } else {
                 graphPrint.append(i.getPointX().getName()).append("->")
                         .append(i.getPointY().getName())
-                        .append("[").append(i.getWeight()).append("]|");
+                        .append("[").append(i.getTimeEdge()).append("]|");
             }
             graphPrint.append("\t");
         }

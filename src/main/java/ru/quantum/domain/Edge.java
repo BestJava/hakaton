@@ -14,6 +14,7 @@ public class Edge {
     public Edge(Point from, Point to, long timeEdge) {
         this.pointX = from;
         this.pointY = to;
+        this.timeEdge = timeEdge;
         this.weight = this.pointY.getSumPoint().divide(BigDecimal.valueOf(Math.addExact(timeEdge, pointY.getTimePoint())),2, BigDecimal.ROUND_UP);
     }
 
@@ -55,9 +56,5 @@ public class Edge {
      */
     public BigDecimal getWeight() {
         return weight;
-    }
-
-    public void setWeight(BigDecimal weight) {
-        this.weight = weight;
     }
 }

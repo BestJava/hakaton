@@ -21,11 +21,7 @@ public class Graph {
     }
 
     public void setPoints(List<Point> points) {
-        if (this.points.isEmpty()) {
-            this.points = points;
-        } else {
-            this.points.addAll(points);
-        }
+        this.points.addAll(points);
     }
 
     /**
@@ -36,7 +32,7 @@ public class Graph {
     }
 
     public void setEdges(List<Edge> edges) {
-        this.edges = edges;
+        this.edges.addAll(edges);
     }
 
     /**
