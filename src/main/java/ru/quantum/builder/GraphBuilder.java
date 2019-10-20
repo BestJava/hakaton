@@ -30,7 +30,7 @@ public class GraphBuilder {
     public List<Point> parseOfPoints(String dataJson) {
         // распарсим входные данные JSON
         Type typeJson = TypeToken.getParameterized(List.class, Point.class).getType();
-        return new Gson().fromJson(this.dataJson, typeJson);
+        return new Gson().fromJson(dataJson, typeJson);
     }
 
     /**
@@ -61,6 +61,9 @@ public class GraphBuilder {
                 pointI = points.get(i);
                 String eqNameI = pointI.getName();
                 for (int j = 0; j < graph.getEdgesMap()[i].length; j++) {
+                    if (graph.getEdgesMap()[i][j] != null) {
+                        continue;
+                    }
                     pointJ = points.get(j);
                     String eqNameJ = pointJ.getName();
                     if (Objects.nonNull(pointI.getPath())) {
@@ -71,6 +74,11 @@ public class GraphBuilder {
                             graph.getEdges().add(edgeCnt, new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameJ))));
                             graph.getEdgesMap()[i][j] = graph.getEdges().get(edgeCnt);
                             edgeCnt++;
+                            if (!pointI.getName().equals(pointJ.getName())) {
+                                graph.getEdges().add(edgeCnt, new Edge(pointJ, pointI, Long.valueOf(mapPaths.get(eqNameJ))));
+                                graph.getEdgesMap()[j][i] = graph.getEdges().get(edgeCnt);
+                                edgeCnt++;
+                            }
                             continue;
                         }
                     }
@@ -82,6 +90,11 @@ public class GraphBuilder {
                             graph.getEdges().add(edgeCnt, new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameI))));
                             graph.getEdgesMap()[i][j] = graph.getEdges().get(edgeCnt);
                             edgeCnt++;
+                            if (!pointI.getName().equals(pointJ.getName())) {
+                                graph.getEdges().add(edgeCnt, new Edge(pointJ, pointI, Long.valueOf(mapPaths.get(eqNameI))));
+                                graph.getEdgesMap()[j][i] = graph.getEdges().get(edgeCnt);
+                                edgeCnt++;
+                            }
                         }
                     }
                 }
