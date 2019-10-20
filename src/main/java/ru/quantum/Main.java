@@ -18,6 +18,20 @@ public class Main {
         app.init(5, dataMaps);
         app.splitForSectors(app.getGraph());
         //System.out.println(print(app.getGraph())); //TODO: для печати матрицы смежности
+
+        /* Алгоритм Флойда-Уоршелла за O(V^3) */
+        int vNum = app.getGraph().getPoints().size();
+        Edge[][] dist = new Edge[vNum][vNum]; // dist[i][j] = минимальное_расстояние(i, j)
+        for (int i = 0; i < vNum; i++)
+            System.arraycopy(app.getGraph().getEdgesMap()[i], 0, dist[i], 0, vNum);
+        for (int k = 0; k < vNum; k++)
+            for (int i = 0; i < vNum; i++)
+                for (int j = 0; j < vNum; j++) {
+                    if (dist[i][j] == null || dist[i][k] == null || dist[k][j] == null) {
+                        continue;
+                    }
+                    dist[i][j].setTimeEdge(Math.min(dist[i][j].getTimeEdge(), dist[i][k].getTimeEdge() + dist[k][j].getTimeEdge()));
+                }
     }
 
     /**
@@ -41,7 +55,7 @@ public class Main {
         return graphPrint.append("\n").toString();
     }
 
-    private static String print(Graph graph){
+    private static String print(Graph graph) {
         StringBuilder graphPrint = new StringBuilder();
         graphPrint.append("                    ");
         for (int i = 1; i <= graph.getPoints().size(); i++) {
