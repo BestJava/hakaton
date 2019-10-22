@@ -55,6 +55,7 @@ public class GraphBuilder {
         if (!points.isEmpty()) {
             graph.setEdgesMap(new Edge[points.size()][points.size()]);
             Point pointI, pointJ;
+            Edge edge;
             Map<String, Integer> mapPaths;
             int edgeCnt = 0;
             for (int i = 0; i < graph.getEdgesMap().length; i++) {
@@ -71,12 +72,16 @@ public class GraphBuilder {
                                 .filter(it -> it.containsKey(eqNameJ))
                                 .findFirst().orElse(null);
                         if (Objects.nonNull(mapPaths)) {
-                            graph.getEdges().add(edgeCnt, new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameJ))));
-                            graph.getEdgesMap()[i][j] = graph.getEdges().get(edgeCnt);
+                            edge = new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameJ)));
+                            pointI.getEdges().add(edge);
+                            graph.setEdges(pointI.getEdges());
+                            graph.getEdgesMap()[i][j] = edge;
                             edgeCnt++;
                             if (!pointI.getName().equals(pointJ.getName())) {
-                                graph.getEdges().add(edgeCnt, new Edge(pointJ, pointI, Long.valueOf(mapPaths.get(eqNameJ))));
-                                graph.getEdgesMap()[j][i] = graph.getEdges().get(edgeCnt);
+                                edge = new Edge(pointJ, pointI, Long.valueOf(mapPaths.get(eqNameJ)));
+                                pointI.getEdges().add(edge);
+                                graph.setEdges(pointI.getEdges());
+                                graph.getEdgesMap()[j][i] = edge;
                                 edgeCnt++;
                             }
                             continue;
@@ -87,12 +92,16 @@ public class GraphBuilder {
                                 .filter(it -> it.containsKey(eqNameI))
                                 .findFirst().orElse(null);
                         if (Objects.nonNull(mapPaths)) {
-                            graph.getEdges().add(edgeCnt, new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameI))));
-                            graph.getEdgesMap()[i][j] = graph.getEdges().get(edgeCnt);
+                            edge = new Edge(pointI, pointJ, Long.valueOf(mapPaths.get(eqNameI)));
+                            pointI.getEdges().add(edge);
+                            graph.setEdges(pointI.getEdges());
+                            graph.getEdgesMap()[i][j] = edge;
                             edgeCnt++;
                             if (!pointI.getName().equals(pointJ.getName())) {
-                                graph.getEdges().add(edgeCnt, new Edge(pointJ, pointI, Long.valueOf(mapPaths.get(eqNameI))));
-                                graph.getEdgesMap()[j][i] = graph.getEdges().get(edgeCnt);
+                                edge = new Edge(pointJ, pointI, Long.valueOf(mapPaths.get(eqNameI)));
+                                pointI.getEdges().add(edge);
+                                graph.setEdges(pointI.getEdges());
+                                graph.getEdgesMap()[j][i] = edge;
                                 edgeCnt++;
                             }
                         }

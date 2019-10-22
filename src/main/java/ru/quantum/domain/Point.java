@@ -1,6 +1,7 @@
 package ru.quantum.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +15,12 @@ public class Point {
     private long timePoint;
     private int status;
     private BigDecimal weight;
+    private List<Edge> edges;
     private List<Map<String, Integer>> path;
     private List<Vertex> partInTree;
 
-    public Point(String name) {
-        this.name = name;
+    public Point(){
+        this.edges = new ArrayList<>();
     }
 
     /**
@@ -97,6 +99,29 @@ public class Point {
      */
     public BigDecimal getWeight() {
         return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+
+    /**
+     * @return список ребер соприкасающихся с вершиной
+     */
+    public List<Edge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(List<Edge> edges) {
+        this.edges = edges;
+    }
+
+    public Edge getEdge(Point v) {
+        for (Edge e : edges) {
+            if (e.getPointY().equals(v))
+                return e;
+        }
+        return null;
     }
 
     /**
