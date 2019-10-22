@@ -12,8 +12,8 @@ public class Inkassator {
         graph = new Graph();
     }
 
-    public void init(int mashineCount, String jsonMap) {
-        this.autoCashCount = mashineCount;
+    public void init(int carCount, String jsonMap) {
+        this.autoCashCount = carCount;
         this.graph = new GraphBuilder(jsonMap).build();
     }
 
@@ -29,12 +29,12 @@ public class Inkassator {
         }
     }
 
-    public Mashine getMashine(int mashineNum) {
+    public Car getCar(int carNum) {
         return null;
     }
 
-    void getNextPoint(int mashineNum) {
-        Mashine mashine = getMashine(mashineNum);
+    void getNextPoint(int carNum) {
+        Car car = getCar(carNum);
     }
 
     public int getAutoCashCount() {

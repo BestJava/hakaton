@@ -11,7 +11,6 @@ public class Graph {
     private List<Edge> edges = new ArrayList<>();
     private Edge[][] edgesMap;
     Vertex root;
-    List<Branch> branches;
 
     /**
      * @return вершины (точки) графа
