@@ -1,6 +1,9 @@
 package ru.quantum.events;
 
-import ru.quantum.domain.*;
+import ru.quantum.domain.Car;
+import ru.quantum.domain.CarsMap;
+import ru.quantum.domain.EdgeMap;
+import ru.quantum.domain.PointMap;
 import ru.quantum.helpers.GraphHelper;
 import ru.quantum.schemas.ServerConnect;
 import ru.quantum.schemas.ServerGoto;
@@ -53,7 +56,7 @@ public class EventServerProcessor {
         this.pointMap = new PointMap(event.getPoints());
         enablePointsMap = new ArrayList<Integer>();
         priorityPointsMap = new ArrayList<Integer>();
-        for (int i=0; i<pointMap.size(); i++) {
+        for (int i = 0; i < pointMap.size(); i++) {
             enablePointsMap.add(i, 1);
             priorityPointsMap.add(i, 0);
         }
@@ -72,7 +75,18 @@ public class EventServerProcessor {
     }
 
     public void eventPointsUpdate(ServerPointsupdate event) {
-        //TODO реализация update
+        event.getPoints().forEach(it -> {
+            if (it.getDisable()) {
+                enablePointsMap.set(it.getP(), 0);
+            } else {
+                enablePointsMap.set(it.getP(), 1);
+            }
+            if (it.getPriority()) {
+                priorityPointsMap.set(it.getP(), 1);
+            } else {
+                priorityPointsMap.set(it.getP(), 0);
+            }
+        });
     }
 
     public String getToken() {
@@ -108,7 +122,7 @@ public class EventServerProcessor {
                 }
             }
         }
-        for (int i=0; i<enablePointsMap.size(); i++) {
+        for (int i = 0; i < enablePointsMap.size(); i++) {
             if (enablePointsMap.get(i) == 0) {
                 newPointMap.put(i, 0.0);
             }
