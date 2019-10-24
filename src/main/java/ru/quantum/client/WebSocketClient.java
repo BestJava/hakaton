@@ -1,8 +1,23 @@
 package ru.quantum.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.quantum.events.EventServerProcessor;
+import ru.quantum.schemas.ClientGoto;
+import ru.quantum.schemas.ServerConnect;
+import ru.quantum.schemas.ServerGoto;
+import ru.quantum.schemas.ServerPoints;
+import ru.quantum.schemas.ServerRoutes;
+import ru.quantum.schemas.ServerTraffic;
 
-import javax.websocket.*;
+import javax.websocket.ClientEndpoint;
+import javax.websocket.CloseReason;
+import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -51,28 +66,41 @@ public class WebSocketClient {
         }
     }
 
- /*   @OnError
-    public void onError(Session session, Throwable t) {
-        if (t instanceof SessionException) {
-            userSession.
-        }
-    }
-*/
+    /*   @OnError
+       public void onError(Session session, Throwable t) {
+           if (t instanceof SessionException) {
+               userSession.
+           }
+       }
+   */
     @OnMessage
-    public void onMessage(Session session, String msg) {
+    public void onMessage(Session session, String msg) throws IOException {
+        EventServerProcessor event = new EventServerProcessor();
         if (msg.substring(3, 8).equals("token")) {
-            System.out.println("Token");
-        } else if(msg.substring(3, 9).equals("routes")) {
-            System.out.println("Route");
+            ServerConnect connect = objectMapper.readValue(msg, ServerConnect.class);
+            event.eventConnect(connect);
+        } else if (msg.substring(3, 9).equals("routes")) {
             String[] jsons = msg.split("\n");
-
-        } else if(msg.substring(3, 9).equals("points")) {
+            ServerRoutes routes = objectMapper.readValue(jsons[0], ServerRoutes.class);
+            ServerPoints points = objectMapper.readValue(jsons[1], ServerPoints.class);
+            ServerTraffic traffic = objectMapper.readValue(jsons[2], ServerTraffic.class);
+            event.eventRoutes(routes);
+            event.eventPoints(points);
+            event.eventTraffic(traffic);
+        } else if (msg.substring(3, 9).equals("points")) {
             System.out.println("Point");
-        } else if(msg.substring(3, 10).equals("traffic")) {
+        } else if (msg.substring(3, 10).equals("traffic")) {
             System.out.println("Traffic");
-        } else if(msg.substring(3, 8).equals("point")) {
-            System.out.println("Point");
+        } else if (msg.substring(3, 8).equals("point")) {
             String[] jsons = msg.split("\n");
+            ServerGoto srvGoto = objectMapper.readValue(jsons[0], ServerGoto.class);
+            ServerTraffic traffic = objectMapper.readValue(jsons[1], ServerTraffic.class);
+            event.eventTraffic(traffic);
+            int newPoint = event.eventGoto(srvGoto);
+            ClientGoto clGoto = new ClientGoto();
+            clGoto.setCar(srvGoto.getCar());
+            clGoto.setGoto(newPoint);
+            sendMessage(objectMapper.writeValueAsString(clGoto));
         }
         System.out.println(msg);
     }

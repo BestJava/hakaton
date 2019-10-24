@@ -1,6 +1,7 @@
 package ru.quantum.events;
 
 import ru.quantum.domain.*;
+import ru.quantum.helpers.GraphHelper;
 import ru.quantum.schemas.ServerConnect;
 import ru.quantum.schemas.ServerGoto;
 import ru.quantum.schemas.ServerPoints;
@@ -18,19 +19,27 @@ import java.util.stream.Collectors;
  * Обработчик событий
  */
 public class EventServerProcessor {
-    private final CarsMap cars = new CarsMap();
-    private EdgeMap edgeMap = new EdgeMap();
+    private double teamSum;
+    private CarsMap cars;
+    private EdgeMap edgeMap;
     private PointMap pointMap;
     private List<Integer> enablePointsMap;
     private String token;
+    private final Object teamSumLock = new Object();
 
     public void eventConnect(ServerConnect event) {
         this.token = event.getToken();
-        this.cars.putAll(event.getCars().stream().collect(Collectors.toMap(key -> key, name -> new Car(name))));
+        this.cars = new CarsMap(event.getCars());
     }
 
-    public void eventGoto(ServerGoto event) {
-
+    public int eventGoto(ServerGoto event) {
+        Car car = cars.get(event.getCar());
+        car.setSum(event.getCarsum());
+        car.setGoPoint(event.getPoint());
+        //
+        int newPoint = GraphHelper.getNextPoint(this.edgeMap, getPointMap(car.getName()), car.getSum(), 100000.0, car.getGoPoint());
+        car.setGoPoint(newPoint);
+        return newPoint;
     }
 
     public void eventPoints(ServerPoints event) {
@@ -42,7 +51,7 @@ public class EventServerProcessor {
     }
 
     public void eventRoutes(ServerRoutes event) {
-        this.edgeMap.setRouteMap(event.getRoutes());
+        this.edgeMap = new EdgeMap(event.getRoutes());
     }
 
     public void eventTraffic(ServerTraffic event) {
@@ -50,15 +59,29 @@ public class EventServerProcessor {
     }
 
     public void eventTeamSum(ServerTeamsum event) {
-
+        synchronized (teamSumLock) {
+            this.teamSum += event.getTeamsum();
+        }
     }
 
     public String getToken() {
         return token;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public CarsMap getCars() {
+        return cars;
+    }
+
+    public EdgeMap getEdgeMap() {
+        return edgeMap;
+    }
+
+    public PointMap getPointMap() {
+        return pointMap;
+    }
+
+    public double getTeamSum() {
+        return teamSum;
     }
 
     // генерирует PointMap для передачи в getNextPoint

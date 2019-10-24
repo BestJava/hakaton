@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "point": {
-      "type": "number"
+      "type": "integer"
     },
     "car": {
       "type": "string"

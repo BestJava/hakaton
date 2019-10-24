@@ -6,10 +6,10 @@ import ru.quantum.domain.PointMap;
 import java.util.List;
 
 public class GraphHelper {
-    final int ROOT_POINT = 1;
-    final double LIMIT_SUM = 1000000;
+    static final int ROOT_POINT = 1;
+    static final double LIMIT_SUM = 1000000;
 
-    int getNextPoint(EdgeMap edgeMap, PointMap pointMap, Double carSum, Double remainTime, int currPoint) {
+    public static int getNextPoint(EdgeMap edgeMap, PointMap pointMap, Double carSum, Double remainTime, int currPoint) {
         int nextPoint = 1;
         List<Double> stepEdgesCurrent = edgeMap.routes(currPoint);
         List<Double> stepEdgesRoot = edgeMap.routes(ROOT_POINT);
