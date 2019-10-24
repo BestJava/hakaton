@@ -5,6 +5,7 @@ import ru.quantum.helpers.GraphHelper;
 import ru.quantum.schemas.ServerConnect;
 import ru.quantum.schemas.ServerGoto;
 import ru.quantum.schemas.ServerPoints;
+import ru.quantum.schemas.ServerPointsupdate;
 import ru.quantum.schemas.ServerRoutes;
 import ru.quantum.schemas.ServerTeamsum;
 import ru.quantum.schemas.ServerTraffic;
@@ -65,6 +66,10 @@ public class EventServerProcessor {
 
     public void eventTeamSum(ServerTeamsum event) {
         this.teamSum.add(event.getTeamsum());
+    }
+
+    public void eventPointsUpdate(ServerPointsupdate event) {
+        //TODO реализация update
     }
 
     public String getToken() {

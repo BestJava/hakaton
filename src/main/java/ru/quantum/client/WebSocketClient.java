@@ -6,7 +6,9 @@ import ru.quantum.schemas.ClientGoto;
 import ru.quantum.schemas.ServerConnect;
 import ru.quantum.schemas.ServerGoto;
 import ru.quantum.schemas.ServerPoints;
+import ru.quantum.schemas.ServerPointsupdate;
 import ru.quantum.schemas.ServerRoutes;
+import ru.quantum.schemas.ServerTeamsum;
 import ru.quantum.schemas.ServerTraffic;
 
 import javax.websocket.ClientEndpoint;
@@ -76,7 +78,12 @@ public class WebSocketClient {
    */
     @OnMessage
     public void onMessage(Session session, String msg) throws IOException {
-        if (msg.substring(3, 8).equals("token")) {
+        if (msg.substring(2, 9).equals("teamsum")) {
+            System.out.println("teamsum msg = " + msg);
+            ServerTeamsum teamsum = objectMapper.readValue(msg, ServerTeamsum.class);
+            event.eventTeamSum(teamsum);
+            System.out.println("team sum = " + teamsum.getTeamsum());
+        } else if (msg.substring(3, 8).equals("token")) {
             ServerConnect connect = objectMapper.readValue(msg, ServerConnect.class);
             event.eventConnect(connect);
         } else if (msg.substring(3, 9).equals("routes")) {
@@ -90,6 +97,7 @@ public class WebSocketClient {
             ClientGoto clGoto = new ClientGoto();
             clGoto.setCar("sb0");
             clGoto.setGoto(3);
+            System.out.println("Goto one = " + clGoto.getCar() + " -> " + clGoto.getGoto());
             sendMessage(objectMapper.writeValueAsString(clGoto));
         } else if (msg.substring(3, 9).equals("points")) {
             System.out.println("Point");
@@ -105,9 +113,12 @@ public class WebSocketClient {
             ClientGoto clGoto = new ClientGoto();
             clGoto.setCar(srvGoto.getCar());
             clGoto.setGoto(newPoint);
+            System.out.println("Goto next = " + clGoto.getCar() + " -> " + clGoto.getGoto());
             sendMessage(objectMapper.writeValueAsString(clGoto));
+        } else if (msg.substring(3, 15).equals("pointsupdate")) {
+            ServerPointsupdate srvPointsUpd = objectMapper.readValue(msg, ServerPointsupdate.class);
+            event.eventPointsUpdate(srvPointsUpd);
         }
-        System.out.println(msg);
     }
 
     public void Disconnect() throws IOException {
