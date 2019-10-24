@@ -10,10 +10,7 @@ import ru.quantum.schemas.ServerTeamsum;
 import ru.quantum.schemas.ServerTraffic;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Обработчик событий
@@ -46,7 +43,7 @@ public class EventServerProcessor {
         this.pointMap = new PointMap(event.getPoints());
         enablePointsMap = new ArrayList<Integer>();
         for (int i=0; i<pointMap.size(); i++) {
-            enablePointsMap.set(i, 1);
+            enablePointsMap.add(i, 1);
         }
     }
 
