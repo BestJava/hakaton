@@ -106,7 +106,7 @@ public class Graph {
         }
     }
 
-    Point getNextPoint(Point currPoint) {
+    Point getNextPoint(BigDecimal carSum, BigDecimal remainTime, Point currPoint) {
         Point nextPoint = null;
         Map<Integer, Edge> stepEdgesCurrent = new HashMap<>();
         Map<Integer, Edge> stepEdgesRoot = new HashMap<>();
