@@ -22,11 +22,11 @@ public class WebSocketClient {
     public void connect(String sServer) {
 
         try {
-            container.setDefaultMaxTextMessageBufferSize(1024 * 1024);
-            container.setDefaultMaxBinaryMessageBufferSize(1024 * 1024);
+            container.setDefaultMaxTextMessageBufferSize(Integer.MAX_VALUE);
+            container.setDefaultMaxBinaryMessageBufferSize(Integer.MAX_VALUE);
             userSession = container.connectToServer(this, new URI(sServer));
-            userSession.setMaxBinaryMessageBufferSize(1024 * 1024);
-            userSession.setMaxTextMessageBufferSize(1024 * 1024);
+            userSession.setMaxBinaryMessageBufferSize(Integer.MAX_VALUE);
+            userSession.setMaxTextMessageBufferSize(Integer.MAX_VALUE);
         } catch (DeploymentException | URISyntaxException | IOException e) {
             e.printStackTrace();
         }
