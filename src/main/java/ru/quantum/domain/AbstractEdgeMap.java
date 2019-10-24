@@ -1,10 +1,10 @@
 package ru.quantum.domain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractEdgeMap extends HashMap<String, Double> {
+public abstract class AbstractEdgeMap extends ConcurrentHashMap<String, Double> {
 
     public Double get(Integer a, Integer b) {
         return get(createKey(a, b));
