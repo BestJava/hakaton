@@ -76,15 +76,19 @@ public class EventServerProcessor {
 
     public void eventPointsUpdate(ServerPointsupdate event) {
         event.getPoints().forEach(it -> {
-            if (it.getDisable()) {
-                enablePointsMap.set(it.getP(), 0);
-            } else {
-                enablePointsMap.set(it.getP(), 1);
+            if (it.getDisable() != null) {
+                if (it.getDisable()) {
+                    enablePointsMap.set(it.getP(), 0);
+                } else {
+                    enablePointsMap.set(it.getP(), 1);
+                }
             }
-            if (it.getPriority()) {
-                priorityPointsMap.set(it.getP(), 1);
-            } else {
-                priorityPointsMap.set(it.getP(), 0);
+            if (it.getPriority() != null) {
+                if (it.getPriority()) {
+                    priorityPointsMap.set(it.getP(), 1);
+                } else {
+                    priorityPointsMap.set(it.getP(), 0);
+                }
             }
         });
     }
