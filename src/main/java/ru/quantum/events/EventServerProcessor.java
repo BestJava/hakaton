@@ -21,6 +21,7 @@ public class EventServerProcessor {
     private EdgeMap edgeMap;
     private PointMap pointMap;
     private List<Integer> enablePointsMap;
+    private List<Integer> priorityPointsMap;
     private String token;
     private final Object teamSumLock = new Object();
 
@@ -50,8 +51,10 @@ public class EventServerProcessor {
     public void eventPoints(ServerPoints event) {
         this.pointMap = new PointMap(event.getPoints());
         enablePointsMap = new ArrayList<Integer>();
+        priorityPointsMap = new ArrayList<Integer>();
         for (int i=0; i<pointMap.size(); i++) {
             enablePointsMap.add(i, 1);
+            priorityPointsMap.add(i, 0);
         }
     }
 
@@ -105,6 +108,10 @@ public class EventServerProcessor {
         for (int i=0; i<enablePointsMap.size(); i++) {
             if (enablePointsMap.get(i) == 0) {
                 newPointMap.put(i, 0.0);
+            }
+            if (priorityPointsMap.get(i) == 1) {
+                Double sum = newPointMap.get(i);
+                newPointMap.put(i, sum + sum);
             }
         }
         return newPointMap;

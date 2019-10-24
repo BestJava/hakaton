@@ -15,6 +15,7 @@ public class TestWS {
 
         wsc = new WebSocketClient();
         //    wsc.callback = this;
+      //  wsc.connect("ws://172.30.9.50:8080/race");
         wsc.connect("ws://localhost:8080/race");
         wsc.sendMessage("{ \"team\": \"Кванты\"}");
 
