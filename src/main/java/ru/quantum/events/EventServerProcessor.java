@@ -21,14 +21,10 @@ public class EventServerProcessor {
     private EdgeMap edgeMap = new EdgeMap();
     private PointMap pointMap;
     private String token;
-    private final Object carLock = new Object();
-    private final Object trafficLock = new Object();
 
     public void eventConnect(ServerConnect event) {
         this.token = event.getToken();
-        synchronized (carLock) {
-            this.cars.putAll(event.getCars().stream().collect(Collectors.toMap(key -> key, name -> new Car(name))));
-        }
+        this.cars.putAll(event.getCars().stream().collect(Collectors.toMap(key -> key, name -> new Car(name))));
     }
 
     public void eventGoto(ServerGoto event) {
@@ -44,9 +40,7 @@ public class EventServerProcessor {
     }
 
     public void eventTraffic(ServerTraffic event) {
-        synchronized (trafficLock) {
-            this.edgeMap.updateTraffic(event.getTraffic());
-        }
+        this.edgeMap.updateTraffic(event.getTraffic());
     }
 
     public void eventTeamSum(ServerTeamsum event) {
