@@ -29,6 +29,7 @@ public class WebSocketClient {
     protected Session userSession = null;
     private static final int MAX_BUFFER_SIZE = 1024 * 1024 * 50;
 
+    private EventServerProcessor event = new EventServerProcessor();
     protected ObjectMapper objectMapper = new ObjectMapper();
 
     public WebSocketClient() {
@@ -62,7 +63,7 @@ public class WebSocketClient {
     public void onClose(Session session, CloseReason closeReason) throws Exception {
         if (!CloseReason.CloseCodes.NORMAL_CLOSURE.equals(closeReason.getCloseCode())) {
             connect("ws://localhost:8080/race");
-            sendMessage("{ \"reconnect\": \"token_goes_here\"}");//todo: put token
+            sendMessage("{ \"reconnect\": \"" + event.getToken() + "\"}");//todo: put token
         }
     }
 
@@ -75,7 +76,6 @@ public class WebSocketClient {
    */
     @OnMessage
     public void onMessage(Session session, String msg) throws IOException {
-        EventServerProcessor event = new EventServerProcessor();
         if (msg.substring(3, 8).equals("token")) {
             ServerConnect connect = objectMapper.readValue(msg, ServerConnect.class);
             event.eventConnect(connect);
@@ -87,15 +87,20 @@ public class WebSocketClient {
             event.eventRoutes(routes);
             event.eventPoints(points);
             event.eventTraffic(traffic);
+            ClientGoto clGoto = new ClientGoto();
+            clGoto.setCar("sb0");
+            clGoto.setGoto(3);
+            sendMessage(objectMapper.writeValueAsString(clGoto));
         } else if (msg.substring(3, 9).equals("points")) {
             System.out.println("Point");
         } else if (msg.substring(3, 10).equals("traffic")) {
-            System.out.println("Traffic");
+            ServerTraffic traffic = objectMapper.readValue(msg, ServerTraffic.class);
+            event.eventTraffic(traffic);
         } else if (msg.substring(3, 8).equals("point")) {
             String[] jsons = msg.split("\n");
-            ServerGoto srvGoto = objectMapper.readValue(jsons[0], ServerGoto.class);
-            ServerTraffic traffic = objectMapper.readValue(jsons[1], ServerTraffic.class);
-            event.eventTraffic(traffic);
+            ServerGoto srvGoto = objectMapper.readValue(msg, ServerGoto.class);
+            // ServerTraffic traffic = objectMapper.readValue(jsons[1], ServerTraffic.class);
+            // event.eventTraffic(traffic);
             int newPoint = event.eventGoto(srvGoto);
             ClientGoto clGoto = new ClientGoto();
             clGoto.setCar(srvGoto.getCar());

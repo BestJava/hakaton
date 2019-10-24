@@ -16,7 +16,7 @@ public class TestWS {
         wsc = new WebSocketClient();
         //    wsc.callback = this;
         wsc.connect("ws://localhost:8080/race");
-        wsc.sendMessage("{ \"team\": \"Имя команды1\"}");
+        wsc.sendMessage("{ \"team\": \"Кванты\"}");
 
         while (true) {
             Thread.sleep(10000);
