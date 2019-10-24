@@ -11,14 +11,6 @@ import java.util.Map;
 public class Point {
     private String name;
 
-    public Integer getNum() {
-        return num;
-    }
-
-    public void setNum(Integer num) {
-        this.num = num;
-    }
-
     private Integer num;
     private boolean target;
     private BigDecimal sumPoint;
@@ -28,6 +20,14 @@ public class Point {
     private List<Edge> edges;
     private List<Map<String, Integer>> path;
     private List<Vertex> partInTree;
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
 
     public int getDistance() {
         return distance;

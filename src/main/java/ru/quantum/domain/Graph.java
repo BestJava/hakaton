@@ -132,7 +132,7 @@ public class Graph {
         }
 
         // TODO остаток времени и заполнение тачки и вернуться домой
-        
+
         BigDecimal maxCost = BigDecimal.ZERO;
         for (Map.Entry<Integer, Edge> stepEdge: stepEdgesCurrent.entrySet()){
             Edge e = stepEdge.getValue();
