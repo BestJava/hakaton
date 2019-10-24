@@ -1,6 +1,7 @@
 package ru.quantum.helpers;
 
 import ru.quantum.domain.EdgeMap;
+import ru.quantum.domain.PointMap;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class GraphHelper {
     static int ROOT_POINT = 1;
     static double LIMIT_SUM = 1000000;
 
-    int getNextPoint(EdgeMap edgeMap, Double carSum, Double remainTime, int currPoint) {
+    int getNextPoint(EdgeMap edgeMap, PointMap pointMap, Double carSum, Double remainTime, int currPoint) {
         int nextPoint = 1;
         List<Double> stepEdgesCurrent = edgeMap.routes(currPoint);
         List<Double> stepEdgesRoot = edgeMap.routes(ROOT_POINT);
@@ -32,7 +33,7 @@ public class GraphHelper {
             double rootWeight = 0;
             double minWeight = 0;
             for (int i = 0; i < stepEdgesCurrent.size(); i++) {
-                double pointSum = 00; // сумма в точке i;
+                double pointSum = pointMap.get(i); // сумма в точке i;
                 if (pointSum == 0) continue;  // если сумма в точке = 0, пропускаем
                 if (LIMIT_SUM - carSum > pointSum) continue;
                 Double stepEdge = stepEdgesCurrent.get(i);
