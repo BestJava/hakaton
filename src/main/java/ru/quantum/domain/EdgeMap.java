@@ -39,8 +39,13 @@ public class EdgeMap extends AbstractEdgeMap {
         List<Double> routes = routeMap.routes(point);
         List<Double> traffics = trafficMap.routes(point);
 
-        for (int i = 0; i < routes.size(); i++) {
-            routes.add(i, routes.get(i) * traffics.get(i));
+        int i = 0;
+        try {
+            for (i = 0; i < routes.size(); i++) {
+                routes.set(i, routes.get(i) * traffics.get(i));
+            }
+        } catch (NullPointerException e) {
+            throw e;
         }
 
         return routes;

@@ -21,6 +21,10 @@ public abstract class AbstractEdgeMap extends ConcurrentHashMap<String, Double> 
             if (i == point) {
                 routes.add(0d);
             } else {
+                Double weight = get(i, point);
+                if (weight == null) {
+                    break;
+                }
                 routes.add(get(i, point));
             }
         }

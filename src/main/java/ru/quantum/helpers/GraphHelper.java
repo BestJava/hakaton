@@ -57,6 +57,8 @@ public class GraphHelper {
                 nextPoint = ROOT_POINT;
             }
         }
+
+        System.out.println("next point:" + nextPoint);
         return nextPoint;
     }
 }
