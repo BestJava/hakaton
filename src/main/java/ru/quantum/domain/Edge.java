@@ -9,7 +9,7 @@ public class Edge {
     private Point pointX;
     private Point pointY;
     private long timeEdge;
-    private long timeEdgeStart;
+    private long timeEdgeЫефке;
     private BigDecimal weight;
 
     public Edge(Point from, Point to, long timeEdge) {
