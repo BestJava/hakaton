@@ -98,7 +98,7 @@ public class Graph {
         }
     }
 
-    Point GetOtherPoint(Edge edge, Point currPoint) {
+    Point getOtherPoint(Edge edge, Point currPoint) {
         if (currPoint == edge.getPointY()) {
             return edge.getPointX();
         } else {
@@ -135,12 +135,12 @@ public class Graph {
 
         BigDecimal maxCost = BigDecimal.ZERO;
         for (Map.Entry<Integer, Edge> stepEdge: stepEdgesCurrent.entrySet()){
-            Edge e = stepEdge.getValue();
-            Point p = GetOtherPoint(e, currPoint);
-            BigDecimal cost = p.getSumPoint().divide(stepEdge.getValue().getWeight().add(stepEdgesRoot.get(p.getNum()).getWeight()));
+            Edge edge = stepEdge.getValue();
+            Point point = getOtherPoint(edge, currPoint);
+            BigDecimal cost = point.getSumPoint().divide(stepEdge.getValue().getWeight().add(stepEdgesRoot.get(point.getNum()).getWeight()));
             if (maxCost.compareTo(cost) < 0) {
                 maxCost = cost;
-                nextPoint = p;
+                nextPoint = point;
             }
         }
 

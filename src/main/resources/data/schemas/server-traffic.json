@@ -8,10 +8,10 @@
         "type": "object",
         "properties": {
           "a": {
-            "type": "number"
+            "type": "integer"
           },
           "b": {
-            "type": "number"
+            "type": "integer"
           },
           "jam": {
             "type": "number"

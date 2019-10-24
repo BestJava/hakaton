@@ -8,7 +8,7 @@
         "type": "object",
         "properties": {
           "p": {
-            "type": "number"
+            "type": "integer"
           },
           "money": {
             "type": "number"
