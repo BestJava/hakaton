@@ -19,6 +19,16 @@ public class Point {
     private List<Map<String, Integer>> path;
     private List<Vertex> partInTree;
 
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    private int distance; // удаленность от точки сбора
+
     public Point(){
         this.edges = new ArrayList<>();
     }

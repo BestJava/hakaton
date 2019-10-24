@@ -1,7 +1,9 @@
 package ru.quantum.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Класс описывающий граф
@@ -49,7 +51,31 @@ public class Graph {
         this.edgesMap = edgesMap;
     }
 
-    public Vertex makeTree {
+    public void BFS() {
+        final int size = points.size();
+        final List<Point> pointSet = new ArrayList<>(size);
 
+        int level = 0;
+        Point rootPoint = root.point;
+        rootPoint.setDistance(level);
+        pointSet.add(rootPoint);
+        Point currPoint;
+        Point tempPoint;
+        currPoint = rootPoint;
+
+        while (!pointSet.isEmpty()) {
+            currPoint = pointSet.get(0);
+            level = currPoint.getDistance() + 1;
+            for (Edge e : currPoint.getEdges()) {
+                if (e.getPointX() == currPoint) {
+                    tempPoint = e.getPointY();
+                } else {
+                    tempPoint = e.getPointX();
+                }
+                tempPoint.setDistance(level);
+                pointSet.add(tempPoint);
+            }
+            currPoint = pointSet.remove(0);
+        }
     }
 }
