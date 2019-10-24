@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "point": {
+      "type": "number"
+    },
+    "car": {
+      "type": "string"
+    },
+    "carsum": {
+      "type": "number"
+    }
+  }
+}
