@@ -12,6 +12,7 @@ public class WebSocketClient {
 
     protected WebSocketContainer container;
     protected Session userSession = null;
+    private static final int MAX_BUFFER_SIZE = 1024 * 1024 * 50;
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
@@ -22,11 +23,11 @@ public class WebSocketClient {
     public void connect(String sServer) {
 
         try {
-            container.setDefaultMaxTextMessageBufferSize(1024 * 1024 * 50);
-            container.setDefaultMaxBinaryMessageBufferSize(1024 * 1024 * 50);
+            container.setDefaultMaxTextMessageBufferSize(MAX_BUFFER_SIZE);
+            container.setDefaultMaxBinaryMessageBufferSize(MAX_BUFFER_SIZE);
             userSession = container.connectToServer(this, new URI(sServer));
-            userSession.setMaxBinaryMessageBufferSize(1024 * 1024 * 50);
-            userSession.setMaxTextMessageBufferSize(1024 * 1024 * 50);
+            userSession.setMaxBinaryMessageBufferSize(MAX_BUFFER_SIZE);
+            userSession.setMaxTextMessageBufferSize(MAX_BUFFER_SIZE);
         } catch (DeploymentException | URISyntaxException | IOException e) {
             e.printStackTrace();
         }
