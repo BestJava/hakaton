@@ -3,6 +3,7 @@ package ru.quantum.domain;
 import ru.quantum.builder.GraphBuilder;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class Inkassator {
     private int autoCashCount;
@@ -43,5 +44,11 @@ public class Inkassator {
 
     public Graph getGraph() {
         return graph;
+    }
+
+    public getShortWay()
+
+    public Vertex makeTree(List<Edge> edges) {
+        Point rootPoint
     }
 }
