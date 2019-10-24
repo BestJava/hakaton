@@ -31,7 +31,11 @@ public class Graph {
     }
 
     public void setEdges(List<Edge> edges) {
-        this.edges.addAll(edges);
+        if (this.edges.isEmpty()) {
+            this.edges.addAll(edges);
+        } else {
+            this.edges.addAll(edges);
+        }
     }
 
     /**

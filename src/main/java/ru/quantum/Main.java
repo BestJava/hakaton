@@ -1,5 +1,6 @@
 package ru.quantum;
 
+import ru.quantum.algorithms.Astar;
 import ru.quantum.domain.Edge;
 import ru.quantum.domain.Graph;
 import ru.quantum.domain.Inkassator;
@@ -7,6 +8,7 @@ import ru.quantum.domain.Inkassator;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 
 public class Main {
     private static final String FILE_PATH = "/data/dataMaps.json";
@@ -17,7 +19,11 @@ public class Main {
         Inkassator app = new Inkassator();
         app.init(5, dataMaps);
         app.splitForSectors(app.getGraph());
-        //System.out.println(print(app.getGraph())); //TODO: для печати матрицы смежности
+
+        Astar algo = new Astar();
+        List<Edge> path = algo.aStar(app.getGraph(), app.getGraph().getPoints().get(0), app.getGraph().getPoints().get(4));
+
+        System.out.println(print(app.getGraph())); //TODO: для печати матрицы смежности
     }
 
     /**
