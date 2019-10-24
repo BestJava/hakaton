@@ -1,6 +1,7 @@
 package ru.quantum.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ru.quantum.domain.Car;
 import ru.quantum.events.EventServerProcessor;
 import ru.quantum.schemas.ClientGoto;
 import ru.quantum.schemas.ServerConnect;
@@ -21,6 +22,7 @@ import javax.websocket.WebSocketContainer;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 @ClientEndpoint
 public class WebSocketClient {
@@ -41,9 +43,12 @@ public class WebSocketClient {
         try {
             container.setDefaultMaxTextMessageBufferSize(MAX_BUFFER_SIZE);
             container.setDefaultMaxBinaryMessageBufferSize(MAX_BUFFER_SIZE);
+            container.setAsyncSendTimeout(Long.MAX_VALUE);
+            container.setDefaultMaxSessionIdleTimeout(Long.MAX_VALUE);
             userSession = container.connectToServer(this, new URI(sServer));
             userSession.setMaxBinaryMessageBufferSize(MAX_BUFFER_SIZE);
             userSession.setMaxTextMessageBufferSize(MAX_BUFFER_SIZE);
+            userSession.setMaxIdleTimeout(1024L * 1024L);
         } catch (DeploymentException | URISyntaxException | IOException e) {
             e.printStackTrace();
         }
@@ -87,17 +92,27 @@ public class WebSocketClient {
             event.eventRoutes(routes);
             event.eventPoints(points);
             event.eventTraffic(traffic);
-            ClientGoto clGoto = new ClientGoto();
-            clGoto.setCar("sb0");
-            clGoto.setGoto(3);
-            sendMessage(objectMapper.writeValueAsString(clGoto));
+
+            for (Map.Entry<String, Car> carEntry : event.getCars().entrySet()) {
+                ClientGoto clGoto = new ClientGoto();
+                clGoto.setCar(carEntry.getKey());
+
+                ServerGoto serverGoto = new ServerGoto();
+                serverGoto.setCar(carEntry.getKey());
+                serverGoto.setPoint(0);
+                serverGoto.setCarsum(0d);
+
+                int newPoint = event.eventGoto(serverGoto);
+
+                clGoto.setGoto(newPoint);
+                sendMessage(objectMapper.writeValueAsString(clGoto));
+            }
         } else if (msg.substring(3, 9).equals("points")) {
             System.out.println("Point");
         } else if (msg.substring(3, 10).equals("traffic")) {
             ServerTraffic traffic = objectMapper.readValue(msg, ServerTraffic.class);
             event.eventTraffic(traffic);
         } else if (msg.substring(3, 8).equals("point")) {
-            String[] jsons = msg.split("\n");
             ServerGoto srvGoto = objectMapper.readValue(msg, ServerGoto.class);
             // ServerTraffic traffic = objectMapper.readValue(jsons[1], ServerTraffic.class);
             // event.eventTraffic(traffic);
