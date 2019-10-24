@@ -6,4 +6,12 @@ package ru.quantum.dto;
 public class PointDTO {
     int p;
     int money;
+
+    @Override
+    public String toString() {
+        return "PointDTO{" +
+                "p=" + p +
+                ", money=" + money +
+                '}';
+    }
 }

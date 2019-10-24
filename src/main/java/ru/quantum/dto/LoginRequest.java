@@ -5,4 +5,11 @@ package ru.quantum.dto;
  */
 public class LoginRequest {
     String teamName;
+
+    @Override
+    public String toString() {
+        return "LoginRequest{" +
+                "teamName='" + teamName + '\'' +
+                '}';
+    }
 }
