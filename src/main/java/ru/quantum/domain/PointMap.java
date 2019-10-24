@@ -2,10 +2,10 @@ package ru.quantum.domain;
 
 import ru.quantum.schemas.Point;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class PointMap extends HashMap<Integer,Double> {
+public class PointMap extends ConcurrentHashMap<Integer,Double> {
 
     public PointMap(List<Point> points) {
         for (Point point: points) {

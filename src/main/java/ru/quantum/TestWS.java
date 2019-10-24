@@ -18,7 +18,7 @@ public class TestWS {
         wsc.sendMessage("{ \"team\": \"Имя команды1\"}");
 
 
-        Thread.sleep(1000);
+        Thread.sleep(10000);
         wsc.Disconnect();
     }
 
