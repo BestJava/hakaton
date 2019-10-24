@@ -35,7 +35,7 @@ public class GraphHelper {
             for (int i = 0; i < stepEdgesCurrent.size(); i++) {
                 double pointSum = pointMap.get(i); // сумма в точке i;
                 if (pointSum == 0) continue;  // если сумма в точке = 0, пропускаем
-                if (LIMIT_SUM - carSum > pointSum) continue;
+                if (LIMIT_SUM - carSum < pointSum) continue;
                 Double stepEdge = stepEdgesCurrent.get(i);
                 Double stepEdgeRoot = stepEdgesRoot.get(i);
                 if (i == currPoint) continue;
@@ -58,7 +58,7 @@ public class GraphHelper {
             }
         }
 
-        System.out.println("next point:" + nextPoint);
+        System.out.println("next point:" + nextPoint + ", sum: " + pointMap.get(nextPoint));
         return nextPoint;
     }
 }

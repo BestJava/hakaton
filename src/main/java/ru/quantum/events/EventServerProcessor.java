@@ -31,7 +31,15 @@ public class EventServerProcessor {
 
     public int eventGoto(ServerGoto event) {
         Car car = cars.get(event.getCar());
-        car.setSum(event.getCarsum());
+        if (car.getSum() != event.getCarsum()) {
+            pointMap.put(event.getPoint(), 0d);
+        }
+        if (event.getPoint() == 1) {
+            car.setReturnSum(car.getReturnSum() + car.getSum());
+            car.setSum(0);
+        } else {
+            car.setSum(event.getCarsum() - car.getReturnSum());
+        }
         car.setGoPoint(event.getPoint());
         //
         int newPoint = GraphHelper.getNextPoint(this.edgeMap, getPointMap(car.getName()), car.getSum(), 100000.0, car.getGoPoint());
