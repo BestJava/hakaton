@@ -63,7 +63,9 @@ public class EventServerProcessor {
 
     // генерирует PointMap для передачи в getNextPoint
     private PointMap getPointMap(String carName) {
-        PointMap newPointMap = (PointMap)pointMap.clone();
+        PointMap newPointMap = new PointMap();
+        newPointMap.putAll(pointMap);
+
         for (Car car : cars.values()) {
             if (!car.getName().equals(carName)) {
                 int toPoint = car.getGoPoint();
