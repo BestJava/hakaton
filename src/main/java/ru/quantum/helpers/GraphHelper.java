@@ -6,8 +6,8 @@ import ru.quantum.domain.PointMap;
 import java.util.List;
 
 public class GraphHelper {
-    static int ROOT_POINT = 1;
-    static double LIMIT_SUM = 1000000;
+    final int ROOT_POINT = 1;
+    final double LIMIT_SUM = 1000000;
 
     int getNextPoint(EdgeMap edgeMap, PointMap pointMap, Double carSum, Double remainTime, int currPoint) {
         int nextPoint = 1;
