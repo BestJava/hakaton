@@ -102,7 +102,7 @@ public class Astar {
      */
     @SuppressWarnings("unused")
     protected BigDecimal heuristicCostEstimate(Point start, Point goal) {
-        return BigDecimal.ONE;
+        return BigDecimal.ZERO;
     }
 
     private List<Edge> reconstructPath(Map<Point, Point> cameFrom, Point current) {
@@ -118,5 +118,11 @@ public class Astar {
         }
         Collections.reverse(totalPath);
         return totalPath;
+    }
+
+    public static void main(String[] args) {
+        Astar astar = new Astar();
+
+
     }
 }
