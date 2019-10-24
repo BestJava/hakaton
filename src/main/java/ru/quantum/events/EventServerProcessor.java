@@ -11,19 +11,19 @@ import ru.quantum.schemas.ServerTraffic;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.DoubleAdder;
 
 /**
  * Обработчик событий
  */
 public class EventServerProcessor {
-    private double teamSum;
+    private final DoubleAdder teamSum = new DoubleAdder();
     private CarsMap cars;
     private EdgeMap edgeMap;
     private PointMap pointMap;
     private List<Integer> enablePointsMap;
     private List<Integer> priorityPointsMap;
     private String token;
-    private final Object teamSumLock = new Object();
 
     public void eventConnect(ServerConnect event) {
         this.token = event.getToken();
@@ -67,9 +67,7 @@ public class EventServerProcessor {
     }
 
     public void eventTeamSum(ServerTeamsum event) {
-        synchronized (teamSumLock) {
-            this.teamSum += event.getTeamsum();
-        }
+        this.teamSum.add(event.getTeamsum());
     }
 
     public String getToken() {
@@ -89,7 +87,7 @@ public class EventServerProcessor {
     }
 
     public double getTeamSum() {
-        return teamSum;
+        return teamSum.doubleValue();
     }
 
     // генерирует PointMap для передачи в getNextPoint
