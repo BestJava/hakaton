@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "p": {
+            "type": "number"
+          },
+          "money": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

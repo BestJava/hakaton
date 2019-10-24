@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string"
+    },
+    "cars": {
+      "type":"array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "level": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "cars", "token"
+  ]
+}
