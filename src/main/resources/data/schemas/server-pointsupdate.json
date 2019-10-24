@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "pointsupdate": {
+      "type": "integer"
+    },
+    "points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "p": {
+            "type": "integer"
+          },
+          "disable": {
+            "type": "boolean"
+          },
+          "priority": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
