@@ -11,6 +11,7 @@ import java.util.Set;
 public class Graph {
     private List<Point> points = new ArrayList<>();
     private List<Edge> edges = new ArrayList<>();
+    private List<Edge> stepEdges = new ArrayList<>();
     private Edge[][] edgesMap;
     Vertex root;
 
@@ -61,7 +62,6 @@ public class Graph {
         pointSet.add(rootPoint);
         Point currPoint;
         Point tempPoint;
-        currPoint = rootPoint;
 
         while (!pointSet.isEmpty()) {
             currPoint = pointSet.get(0);
@@ -76,6 +76,19 @@ public class Graph {
                 pointSet.add(tempPoint);
             }
             currPoint = pointSet.remove(0);
+        }
+    }
+
+    void makeStepEdges(Point currPoint) {
+        stepEdges.clear();
+        for (Edge edge: currPoint.getEdges()){
+            stepEdges.add(edge);
+        }
+        for (Edge edge: root.point.getEdges()){
+            if (!(((edge.getPointX() == root.point) && (edge.getPointY() == currPoint)) ||
+               ((edge.getPointY() == root.point) && (edge.getPointX() == currPoint)))) {
+                stepEdges.add(edge);
+            }
         }
     }
 }
