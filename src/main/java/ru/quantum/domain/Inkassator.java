@@ -46,9 +46,4 @@ public class Inkassator {
         return graph;
     }
 
-    public getShortWay()
-
-    public Vertex makeTree(List<Edge> edges) {
-        Point rootPoint
-    }
 }

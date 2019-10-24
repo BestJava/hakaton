@@ -48,4 +48,8 @@ public class Graph {
     public void setEdgesMap(Edge[][] edgesMap) {
         this.edgesMap = edgesMap;
     }
+
+    public Vertex makeTree {
+
+    }
 }
