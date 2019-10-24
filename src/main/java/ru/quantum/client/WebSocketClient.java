@@ -43,9 +43,20 @@ public class WebSocketClient {
     }
 
     @OnClose
-    public void onClose(Session session, CloseReason closeReason) {
+    public void onClose(Session session, CloseReason closeReason) throws Exception {
+        if (!CloseReason.CloseCodes.NORMAL_CLOSURE.equals(closeReason.getCloseCode())) {
+            connect("ws://localhost:8080/race");
+            sendMessage("{ \"reconnect\": \"token_goes_here\"}");//todo: put token
+        }
     }
 
+ /*   @OnError
+    public void onError(Session session, Throwable t) {
+        if (t instanceof SessionException) {
+            userSession.
+        }
+    }
+*/
     @OnMessage
     public void onMessage(Session session, String msg) {
         if (msg.substring(3, 8).equals("token")) {
