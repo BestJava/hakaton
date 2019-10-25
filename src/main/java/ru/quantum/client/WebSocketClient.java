@@ -80,21 +80,21 @@ public class WebSocketClient {
         System.out.println(msg);
         if (msg.equals("{\"end\": true}")) {
             sendMessage("{ \"reconnect\": \"" + event.getToken() + "\"}");
-        } else if (msg.substring(2, 9).equals("teamsum")) {
+        } else if (findCommand(msg).equals("teamsum")) {
             System.out.println("teamsum msg = " + msg);
             ServerTeamsum teamsum = objectMapper.readValue(msg, ServerTeamsum.class);
             event.eventTeamSum(teamsum);
             System.out.println("team sum = " + teamsum.getTeamsum());
-        } else if (msg.substring(3, 8).equals("token")) {
+        } else if (findCommand(msg).equals("token")) {
             ServerConnect connect = objectMapper.readValue(msg, ServerConnect.class);
             event.eventConnect(connect);
-        } else if (msg.substring(3, 9).equals("routes")) {
+        } else if (findCommand(msg).equals("routes")) {
             ServerRoutes routes = objectMapper.readValue(msg, ServerRoutes.class);
             event.eventRoutes(routes);
-        } else if (msg.substring(3, 9).equals("points")) {
+        } else if (findCommand(msg).equals("points")) {
             ServerPoints points = objectMapper.readValue(msg, ServerPoints.class);
             event.eventPoints(points);
-        } else if (msg.substring(3, 10).equals("traffic")) {
+        } else if (findCommand(msg).equals("traffic")) {
             ServerTraffic traffic = objectMapper.readValue(msg, ServerTraffic.class);
             event.eventTraffic(traffic);
             if (!isStarted) {
@@ -114,11 +114,11 @@ public class WebSocketClient {
                     sendMessage(objectMapper.writeValueAsString(clGoto));
                 }
             }
-        } else if (msg.substring(2, 5).equals("car")) {
+        } else if (findCommand(msg).equals("car")) {
             ServerTraffic serverTraffic = objectMapper.readValue(msg, ServerTraffic.class);
 
             event.eventTraffic(serverTraffic);
-        } else if (msg.substring(3, 8).equals("point")) {
+        } else if (findCommand(msg).equals("point")) {
             ServerGoto srvGoto = objectMapper.readValue(msg, ServerGoto.class);
             // ServerTraffic traffic = objectMapper.readValue(jsons[1], ServerTraffic.class);
             // event.eventTraffic(traffic);
@@ -128,7 +128,7 @@ public class WebSocketClient {
             clGoto.setGoto(newPoint);
 
             sendMessage(objectMapper.writeValueAsString(clGoto));
-        } else if (msg.substring(3, 15).equals("pointsupdate")) {
+        } else if (findCommand(msg).equals("pointsupdate")) {
             ServerPointsupdate srvPointsUpd = objectMapper.readValue(msg, ServerPointsupdate.class);
             event.eventPointsUpdate(srvPointsUpd);
         }
