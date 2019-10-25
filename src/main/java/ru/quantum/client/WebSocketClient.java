@@ -3,14 +3,7 @@ package ru.quantum.client;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.quantum.domain.Car;
 import ru.quantum.events.EventServerProcessor;
-import ru.quantum.schemas.ClientGoto;
-import ru.quantum.schemas.ServerConnect;
-import ru.quantum.schemas.ServerGoto;
-import ru.quantum.schemas.ServerPoints;
-import ru.quantum.schemas.ServerPointsupdate;
-import ru.quantum.schemas.ServerRoutes;
-import ru.quantum.schemas.ServerTeamsum;
-import ru.quantum.schemas.ServerTraffic;
+import ru.quantum.schemas.*;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
@@ -32,6 +25,7 @@ public class WebSocketClient {
     protected WebSocketContainer container;
     protected Session userSession = null;
     private static final int MAX_BUFFER_SIZE = 1024 * 1024 * 50;
+    private boolean isStarted = false;
 
     private EventServerProcessor event = new EventServerProcessor();
     protected ObjectMapper objectMapper = new ObjectMapper();
@@ -83,7 +77,10 @@ public class WebSocketClient {
    */
     @OnMessage
     public void onMessage(Session session, String msg) throws IOException {
-        if (msg.substring(2, 9).equals("teamsum")) {
+        System.out.println(msg);
+        if (msg.equals("{\"end\": true}")) {
+            sendMessage("{ \"reconnect\": \"" + event.getToken() + "\"}");
+        } else if (msg.substring(2, 9).equals("teamsum")) {
             System.out.println("teamsum msg = " + msg);
             ServerTeamsum teamsum = objectMapper.readValue(msg, ServerTeamsum.class);
             event.eventTeamSum(teamsum);
@@ -92,33 +89,35 @@ public class WebSocketClient {
             ServerConnect connect = objectMapper.readValue(msg, ServerConnect.class);
             event.eventConnect(connect);
         } else if (msg.substring(3, 9).equals("routes")) {
-            String[] jsons = msg.split("\n");
-            ServerRoutes routes = objectMapper.readValue(jsons[0], ServerRoutes.class);
-            ServerPoints points = objectMapper.readValue(jsons[1], ServerPoints.class);
-            ServerTraffic traffic = objectMapper.readValue(jsons[2], ServerTraffic.class);
+            ServerRoutes routes = objectMapper.readValue(msg, ServerRoutes.class);
             event.eventRoutes(routes);
-            event.eventPoints(points);
-            event.eventTraffic(traffic);
-
-            for (Map.Entry<String, Car> carEntry : event.getCars().entrySet()) {
-                ClientGoto clGoto = new ClientGoto();
-                clGoto.setCar(carEntry.getKey());
-
-                ServerGoto serverGoto = new ServerGoto();
-                serverGoto.setCar(carEntry.getKey());
-                serverGoto.setPoint(0);
-                serverGoto.setCarsum(0d);
-
-                int newPoint = event.eventGoto(serverGoto);
-
-                clGoto.setGoto(newPoint);
-                sendMessage(objectMapper.writeValueAsString(clGoto));
-            }
         } else if (msg.substring(3, 9).equals("points")) {
-            System.out.println("Point");
+            ServerPoints points = objectMapper.readValue(msg, ServerPoints.class);
+            event.eventPoints(points);
         } else if (msg.substring(3, 10).equals("traffic")) {
             ServerTraffic traffic = objectMapper.readValue(msg, ServerTraffic.class);
             event.eventTraffic(traffic);
+            if (!isStarted) {
+                isStarted = true;
+                for (Map.Entry<String, Car> carEntry : event.getCars().entrySet()) {
+                    ClientGoto clGoto = new ClientGoto();
+                    clGoto.setCar(carEntry.getKey());
+
+                    ServerGoto serverGoto = new ServerGoto();
+                    serverGoto.setCar(carEntry.getKey());
+                    serverGoto.setPoint(0);
+                    serverGoto.setCarsum(0d);
+
+                    int newPoint = event.eventGoto(serverGoto);
+
+                    clGoto.setGoto(newPoint);
+                    sendMessage(objectMapper.writeValueAsString(clGoto));
+                }
+            }
+        } else if (msg.substring(2, 5).equals("car")) {
+            ServerTraffic serverTraffic = objectMapper.readValue(msg, ServerTraffic.class);
+
+            event.eventTraffic(serverTraffic);
         } else if (msg.substring(3, 8).equals("point")) {
             ServerGoto srvGoto = objectMapper.readValue(msg, ServerGoto.class);
             // ServerTraffic traffic = objectMapper.readValue(jsons[1], ServerTraffic.class);
@@ -127,7 +126,7 @@ public class WebSocketClient {
             ClientGoto clGoto = new ClientGoto();
             clGoto.setCar(srvGoto.getCar());
             clGoto.setGoto(newPoint);
-            System.out.println("Goto next = " + clGoto.getCar() + " -> " + clGoto.getGoto());
+
             sendMessage(objectMapper.writeValueAsString(clGoto));
         } else if (msg.substring(3, 15).equals("pointsupdate")) {
             ServerPointsupdate srvPointsUpd = objectMapper.readValue(msg, ServerPointsupdate.class);

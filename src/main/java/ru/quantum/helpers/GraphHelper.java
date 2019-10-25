@@ -11,7 +11,7 @@ public class GraphHelper {
 
     public static double time = 0d;
 
-    public static int getNextPoint(EdgeMap edgeMap, PointMap pointMap, Double carSum, Double remainTime, int currPoint) {
+    public static int getNextPoint(EdgeMap edgeMap, PointMap pointMap, List<Integer> priorityPointMap, Double carSum, Double remainTime, int currPoint) {
         int nextPoint = 1;
         List<Double> stepEdgesCurrent = edgeMap.routes(currPoint);
         List<Double> stepEdgesRoot = edgeMap.routes(ROOT_POINT);
@@ -38,35 +38,42 @@ public class GraphHelper {
             double minWeight = 0;
             double maxSum = 0;
             double maxPointSum = 0d;
+            double stepEdgeRoot = 0d;
             for (int i = 0; i < stepEdgesCurrent.size(); i++) {
                 double pointSum = pointMap.get(i); // сумма в точке i;
                 if (maxSum < pointSum) {
                     maxSum = pointSum;
                 }
-                if (pointSum == 0) continue;  // если сумма в точке = 0, пропускаем
-                if (LIMIT_SUM - carSum < pointSum) continue;
                 Double stepEdge = stepEdgesCurrent.get(i);
-             //   Double stepEdgeRoot = stepEdgesRoot.get(i);
-                if (i == currPoint) continue;
                 if (i == ROOT_POINT) {
                     rootWeight = stepEdge;
                 } else {
+                    if (i == currPoint) continue;
+                    if (pointSum == 0) continue;  // если сумма в точке = 0, пропускаем
+                    if (LIMIT_SUM - carSum < pointSum) continue;
                     double stepWeight = stepEdge;// + stepEdgeRoot;
-                    double cost = pointSum / stepWeight;
+                    double scoreSum = priorityPointMap.get(i) == 1 ? pointSum + pointSum : pointSum;
+                    double cost = scoreSum / stepWeight;
                     if (maxCost < cost) {
                         maxCost = cost;
                         nextPoint = i;
                         minWeight = stepWeight;
-                        maxPointSum = pointSum;
+                        maxPointSum = scoreSum;
+                        stepEdgeRoot = stepEdgesRoot.get(i);
                     }
                 }
             }
 
-            if (maxPointSum * 5d <= maxSum) {
+            if (maxPointSum * 5d <= maxSum && (carSum + maxSum > LIMIT_SUM)) {
                 nextPoint = ROOT_POINT;
             }
+
+         /*   if (rootWeight != 0d && (maxPointSum/(6.75d * minWeight)) < (maxSum / (3 * rootWeight))) {
+                nextPoint = ROOT_POINT;
+            }*/
+
             // если времени не хватает на сбор денег и достаточно для перехода в точку сбора напрямую, идем в точку сбора
-            if ((minWeight > remainTime) && (rootWeight <= remainTime)) {
+            if ((minWeight + stepEdgeRoot > remainTime) && (rootWeight <= remainTime)) {
                 nextPoint = ROOT_POINT;
             }
             time +=minWeight;
