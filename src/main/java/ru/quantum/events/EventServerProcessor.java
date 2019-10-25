@@ -28,6 +28,7 @@ public class EventServerProcessor {
     private List<Integer> enablePointsMap;
     private List<Integer> priorityPointsMap;
     private String token;
+    private String currentTraffic = "";
     private static final double TOTAL_TIME = 500d;
 
     public void eventConnect(ServerConnect event) {
@@ -51,7 +52,8 @@ public class EventServerProcessor {
         }
         car.setGoPoint(event.getPoint());
         //
-        int newPoint = GraphHelper.getNextPoint(this.edgeMap, getPointMap(car.getName()), priorityPointsMap, car.getSum(), getDuration(event.getDuration()), car.getGoPoint());
+        System.out.println("car: " + car.getName());
+        int newPoint = GraphHelper.getNextPoint(this.edgeMap, getPointMap(car.getName()), priorityPointsMap, car.getSum(), getDuration(event.getDuration()), car.getGoPoint(), cars.size());
         car.setGoPoint(newPoint);
         return newPoint;
     }
@@ -70,8 +72,9 @@ public class EventServerProcessor {
         this.edgeMap = new EdgeMap(event.getRoutes());
     }
 
-    public void eventTraffic(ServerTraffic event) {
+    public void eventTraffic(ServerTraffic event, String currentTraffic) {
         this.edgeMap.updateTraffic(event.getTraffic());
+        this.currentTraffic = currentTraffic;
     }
 
     public void eventTeamSum(ServerTeamsum event) {
@@ -115,6 +118,10 @@ public class EventServerProcessor {
 
     public double getTeamSum() {
         return teamSum.doubleValue();
+    }
+
+    public String getCurrentTraffic() {
+        return currentTraffic;
     }
 
     // генерирует PointMap для передачи в getNextPoint

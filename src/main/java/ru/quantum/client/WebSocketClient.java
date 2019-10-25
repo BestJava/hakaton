@@ -77,7 +77,7 @@ public class WebSocketClient {
    */
     @OnMessage
     public void onMessage(Session session, String msg) throws IOException {
-  //      System.out.println(msg);
+    //    System.out.println(msg);
         if (msg.equals("{\"end\": true}")) {
             sendMessage("{ \"reconnect\": \"" + event.getToken() + "\"}");
         } else if (findCommand(msg).equals("teamsum")) {
@@ -95,8 +95,14 @@ public class WebSocketClient {
             ServerPoints points = objectMapper.readValue(msg, ServerPoints.class);
             event.eventPoints(points);
         } else if (findCommand(msg).equals("traffic")) {
+              //  if (msg.substring(0, msg.length() - 16))
+            String currentTraffic = msg.substring(0, msg.length() - 16);
+            if (currentTraffic.equals(event.getCurrentTraffic())) {
+                return;
+            }
             ServerTraffic traffic = objectMapper.readValue(msg, ServerTraffic.class);
-            event.eventTraffic(traffic);
+            event.eventTraffic(traffic, currentTraffic);
+
             if (!isStarted) {
                 isStarted = true;
                 for (Map.Entry<String, Car> carEntry : event.getCars().entrySet()) {
@@ -117,7 +123,7 @@ public class WebSocketClient {
         } else if (findCommand(msg).equals("car")) {
             ServerTraffic serverTraffic = objectMapper.readValue(msg, ServerTraffic.class);
 
-            event.eventTraffic(serverTraffic);
+            event.eventTraffic(serverTraffic, msg.substring(0, msg.length() - 16));
         } else if (findCommand(msg).equals("point")) {
             ServerGoto srvGoto = objectMapper.readValue(msg, ServerGoto.class);
             // ServerTraffic traffic = objectMapper.readValue(jsons[1], ServerTraffic.class);

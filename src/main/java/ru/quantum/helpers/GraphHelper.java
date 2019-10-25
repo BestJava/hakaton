@@ -11,7 +11,7 @@ public class GraphHelper {
 
     public static double time = 0d;
 
-    public static int getNextPoint(EdgeMap edgeMap, PointMap pointMap, List<Integer> priorityPointMap, Double carSum, Double remainTime, int currPoint) {
+    public static int getNextPoint(EdgeMap edgeMap, PointMap pointMap, List<Integer> priorityPointMap, Double carSum, Double remainTime, int currPoint, int carCount) {
         int nextPoint = 1;
         List<Double> stepEdgesCurrent = edgeMap.routes(currPoint);
         List<Double> stepEdgesRoot = edgeMap.routes(ROOT_POINT);
@@ -30,7 +30,7 @@ public class GraphHelper {
                 }
             }
             time +=minWeight;
-            System.out.println("next point:" + nextPoint + ", sum: " + pointMap.get(nextPoint) + ", time: " + time);
+            System.out.println("next point:" + nextPoint + ", sum: " + pointMap.get(nextPoint) + ", time: " + time + ", duration:" + remainTime);
         } else { // иначе ищем самый выгодный путь
 
             double maxCost = 0;
@@ -64,7 +64,7 @@ public class GraphHelper {
                 }
             }
 
-            if (maxPointSum * 5d <= maxSum && (carSum + maxSum > LIMIT_SUM)) {
+            if (maxPointSum * 5d <= maxSum && (carSum + maxSum > LIMIT_SUM) && currPoint != ROOT_POINT) {
                 nextPoint = ROOT_POINT;
             }
 
@@ -73,11 +73,12 @@ public class GraphHelper {
             }*/
 
             // если времени не хватает на сбор денег и достаточно для перехода в точку сбора напрямую, идем в точку сбора
-            if ((minWeight + stepEdgeRoot > remainTime) && (rootWeight <= remainTime)) {
+            //todo: remove car count
+            if ((minWeight + stepEdgeRoot > (remainTime / (double) carCount)) && (rootWeight <= remainTime) && currPoint != ROOT_POINT) {
                 nextPoint = ROOT_POINT;
             }
             time +=minWeight;
-            System.out.println("next point:" + nextPoint + ", sum: " + pointMap.get(nextPoint) + ", time: " + time);
+            System.out.println("next point:" + nextPoint + ", sum: " + pointMap.get(nextPoint) + ", time to root: " + minWeight + stepEdgeRoot + ", duration:" + remainTime);
         }
 
 
