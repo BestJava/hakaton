@@ -77,11 +77,11 @@ public class WebSocketClient {
    */
     @OnMessage
     public void onMessage(Session session, String msg) throws IOException {
-        System.out.println(msg);
+  //      System.out.println(msg);
         if (msg.equals("{\"end\": true}")) {
             sendMessage("{ \"reconnect\": \"" + event.getToken() + "\"}");
         } else if (findCommand(msg).equals("teamsum")) {
-            System.out.println("teamsum msg = " + msg);
+   //         System.out.println("teamsum msg = " + msg);
             ServerTeamsum teamsum = objectMapper.readValue(msg, ServerTeamsum.class);
             event.eventTeamSum(teamsum);
             System.out.println("team sum = " + teamsum.getTeamsum());

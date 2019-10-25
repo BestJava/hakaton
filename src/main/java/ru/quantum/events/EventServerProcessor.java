@@ -28,7 +28,7 @@ public class EventServerProcessor {
     private List<Integer> enablePointsMap;
     private List<Integer> priorityPointsMap;
     private String token;
-    private static final double TOTAL_TIME = 480d;
+    private static final double TOTAL_TIME = 500d;
 
     public void eventConnect(ServerConnect event) {
         this.token = event.getToken();
@@ -36,7 +36,7 @@ public class EventServerProcessor {
     }
 
     private Double getDuration(Double duration) {
-        return duration == null ? 0d : duration;
+        return duration == null ? TOTAL_TIME : duration;
     }
 
     public int eventGoto(ServerGoto event) {
@@ -51,7 +51,7 @@ public class EventServerProcessor {
         }
         car.setGoPoint(event.getPoint());
         //
-        int newPoint = GraphHelper.getNextPoint(this.edgeMap, getPointMap(car.getName()), priorityPointsMap, car.getSum(), TOTAL_TIME - getDuration(event.getDuration()), car.getGoPoint());
+        int newPoint = GraphHelper.getNextPoint(this.edgeMap, getPointMap(car.getName()), priorityPointsMap, car.getSum(), getDuration(event.getDuration()), car.getGoPoint());
         car.setGoPoint(newPoint);
         return newPoint;
     }
