@@ -146,7 +146,7 @@ public class WebSocketClient {
         }
 
         String cmd = jsonMsg.substring(beginIdx + 1, endIdx);
-        return cmd;
+        return cmd.trim();
     }
 
     public void Disconnect() throws IOException {
