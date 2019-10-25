@@ -135,6 +135,20 @@ public class WebSocketClient {
         }
     }
 
+    private String findCommand(String jsonMsg) {
+        int beginIdx = jsonMsg.indexOf("\"");
+        if (beginIdx == -1) {
+            throw new RuntimeException("Quote not found in json " + jsonMsg);
+        }
+        int endIdx = jsonMsg.indexOf("\"", beginIdx + 1);
+        if (endIdx == -1) {
+            throw new RuntimeException("Second quote not found in json " + jsonMsg);
+        }
+
+        String cmd = jsonMsg.substring(beginIdx + 1, endIdx);
+        return cmd;
+    }
+
     public void Disconnect() throws IOException {
         userSession.close();
     }
