@@ -77,7 +77,7 @@ public class WebSocketClient {
    */
     @OnMessage
     public void onMessage(Session session, String msg) throws IOException {
-    //    System.out.println(msg);
+        System.out.println(msg.length() < 15 ? msg : msg.substring(0, 14));
         if (msg.equals("{\"end\": true}")) {
             sendMessage("{ \"reconnect\": \"" + event.getToken() + "\"}");
         } else if (findCommand(msg).equals("teamsum")) {
@@ -143,11 +143,11 @@ public class WebSocketClient {
     private String findCommand(String jsonMsg) {
         int beginIdx = jsonMsg.indexOf("\"");
         if (beginIdx == -1) {
-            throw new RuntimeException("Quote not found in json " + jsonMsg);
+            return "";
         }
         int endIdx = jsonMsg.indexOf("\"", beginIdx + 1);
         if (endIdx == -1) {
-            throw new RuntimeException("Second quote not found in json " + jsonMsg);
+            return "";
         }
 
         String cmd = jsonMsg.substring(beginIdx + 1, endIdx);
